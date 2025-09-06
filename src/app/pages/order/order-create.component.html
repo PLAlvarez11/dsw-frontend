@@ -1,0 +1,50 @@
+<div class="order-create-container">
+  <h2 class="title">Nueva Orden</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="order-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Persona</mat-label>
+      <mat-select formControlName="personId" required>
+        <mat-option *ngFor="let p of persons" [value]="p.id">
+          {{ p.firstName }} {{ p.lastName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('personId')?.hasError('required')">
+        Selecciona una persona
+      </mat-error>
+    </mat-form-field>
+
+    <div formArrayName="details" class="details-section">
+      <div *ngFor="let d of details.controls; let i = index" [formGroupName]="i" class="detail-row">
+        <mat-form-field appearance="outline" class="flex-item">
+          <mat-label>Item</mat-label>
+          <mat-select formControlName="itemId" required>
+            <mat-option *ngFor="let it of items" [value]="it.id">{{ it.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="quantity-field">
+          <mat-label>Cantidad</mat-label>
+          <input matInput type="number" min="1" formControlName="quantity" />
+        </mat-form-field>
+
+        <button mat-icon-button color="warn" type="button" (click)="removeDetail(i)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button color="primary" type="button" (click)="addDetail()">
+        <mat-icon>add</mat-icon> Agregar Item
+      </button>
+    </div>
+
+    <!-- Botón de guardar -->
+    <div class="submit-section">
+      <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">
+        <mat-icon>save</mat-icon> Guardar Orden
+      </button>
+    </div>
+  </form>
+</div>
